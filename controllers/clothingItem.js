@@ -39,27 +39,21 @@ const getItems = (req, res) => {
     .then((items) => res.status(200).send(items))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Get Items Failed", message: err.message });
-        return;
+        res.status(BAD_DATA).send({ message: "Get Items Failed", err });
+        //return;
       }
       if (err.name === "CastError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Get Items Failed", message: err.message });
-        return;
+        res.status(BAD_DATA).send({ message: "Get Items Failed", err });
+        //return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Get Items Failed", message: err.message });
-        return;
+          .send({ message: "Get Items Failed", err });
+        //return;
       } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Get Items Failed", message: err.message });
-        return;
+        res.status(DEFAULT_ERROR).send({ message: "Get Items Failed", err });
+        //return;
       }
     });
 };
