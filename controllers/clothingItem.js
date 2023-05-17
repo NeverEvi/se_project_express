@@ -3,7 +3,7 @@ const {
   BAD_DATA,
   DOC_NOTFOUND_ERROR,
   DEFAULT_ERROR,
-} = require("../utils/errors.js");
+} = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
@@ -15,26 +15,20 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Create Item Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Create Item Failed", err });
         return;
       }
       if (err.name === "CastError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Create Item Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Create Item Failed", err });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Create Item Failed", message: err.message });
+          .send({ message: "Create Item Failed", err });
         return;
       } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Create Item Failed", message: err.message });
+        res.status(DEFAULT_ERROR).send({ message: "Create Item Failed", err });
         return;
       }
     });
