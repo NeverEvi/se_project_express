@@ -84,7 +84,7 @@ const deleteItem = (req, res) => {
   console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then((item) => res.status(200).send({}))
+    .then(() => res.status(200).send({}))
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
@@ -141,7 +141,7 @@ const deleteLike = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((item) => {
+    .then(() => {
       res.status(200).send({});
     })
     .catch((err) => {
