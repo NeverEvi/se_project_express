@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const { addId } = require("./utils/middlewares");
+const { addId } = require("./middlewares/middlewares");
 
 const { PORT = 3001 } = process.env;
 const app = express();
