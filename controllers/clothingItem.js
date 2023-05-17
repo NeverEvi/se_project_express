@@ -40,21 +40,20 @@ const getItems = (req, res) => {
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Get Items Failed", err });
-        //return;
+        return;
       }
       if (err.name === "CastError") {
         res.status(BAD_DATA).send({ message: "Get Items Failed", err });
-        //return;
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Get Items Failed", err });
-        //return;
-      } else {
-        res.status(DEFAULT_ERROR).send({ message: "Get Items Failed", err });
-        //return;
+        return;
       }
+      res.status(DEFAULT_ERROR).send({ message: "Get Items Failed", err });
+      //return;
     });
 };
 
@@ -83,12 +82,11 @@ const updateItem = (req, res) => {
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Update Item Failed", message: err.message });
         return;
-      } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Update Item Failed", message: err.message });
-        return;
       }
+      res
+        .status(DEFAULT_ERROR)
+        .send({ message: "Update Item Failed", message: err.message });
+      return;
     });
 };
 
