@@ -6,16 +6,11 @@ const {
 } = require("../utils/errors.js");
 
 const createUser = (req, res) => {
-  //create
-  console.log(req);
-  console.log(req.body);
-
   const { name, avatar } = req.body;
 
   userInfo
     .create({ name, avatar })
     .then((item) => {
-      console.log(item);
       res.send({ data: item });
     })
     .catch((err) => {
@@ -23,20 +18,24 @@ const createUser = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Create User Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Create User Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Create User Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Create User Failed", message: err.message });
+        return;
       }
     });
 };
@@ -50,20 +49,24 @@ const getUsers = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Get Users Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Get Users Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Get Users Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Get Users Failed", message: err.message });
+        return;
       }
     });
 };
@@ -80,20 +83,24 @@ const getUser = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Get User Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Get User Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Get User Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Get User Failed", message: err.message });
+        return;
       }
     });
 };

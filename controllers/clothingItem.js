@@ -18,20 +18,24 @@ const createItem = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Create Item Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Create Item Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Create Item Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Create Item Failed", message: err.message });
+        return;
       }
     });
 };
@@ -44,20 +48,24 @@ const getItems = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Get Items Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Get Items Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Get Items Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Get Items Failed", message: err.message });
+        return;
       }
     });
 };
@@ -74,20 +82,24 @@ const updateItem = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Update Item Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Update Item Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Update Item Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Update Item Failed", message: err.message });
+        return;
       }
     });
 };
@@ -103,20 +115,24 @@ const deleteItem = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Delete Item Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Delete Item Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Delete Item Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Delete Item Failed", message: err.message });
+        return;
       }
     });
 };
@@ -136,20 +152,24 @@ const updateLike = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Update Like Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Update Like Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Update Like Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Update Like Failed", message: err.message });
+        return;
       }
     });
 };
@@ -170,20 +190,24 @@ const deleteLike = (req, res) => {
         res
           .status(BAD_DATA)
           .send({ message: "Delete Like Failed", message: err.message });
+        return;
       }
       if (err.name === "CastError") {
         res
           .status(BAD_DATA)
           .send({ message: "Delete Like Failed", message: err.message });
+        return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Delete Like Failed", message: err.message });
+        return;
       } else {
         res
           .status(DEFAULT_ERROR)
           .send({ message: "Delete Like Failed", message: err.message });
+        return;
       }
     });
 };
