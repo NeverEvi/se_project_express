@@ -1,16 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const { addId } = require("./utils/middlewares");
 
 const { PORT = 3001 } = process.env;
 const app = express();
 
 mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
-app.use((req, res, next) => {
-  req.userId = {
-    _id: "6464f05fa4cee3ff70ab6a2b",
-  };
-  next();
-});
+app.use(addId);
 const routes = require("./routes");
 app.use(express.json());
 app.use(routes);
