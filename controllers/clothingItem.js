@@ -143,7 +143,6 @@ const deleteLike = (req, res) => {
     .orFail()
     .then((item) => {
       res.status(200).send({});
-      return;
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
@@ -160,9 +159,7 @@ const deleteLike = (req, res) => {
           .send({ message: "Delete Like Failed", err });
         return;
       }
-      res
-        .status(DEFAULT_ERROR)
-        .send({ message: "Delete Like Failed", message: err.message });
+      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed", err });
     });
 };
 
