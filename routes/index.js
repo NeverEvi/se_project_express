@@ -4,8 +4,7 @@ const userInfo = require("./userInfo");
 
 router.use("/items", clothingItem);
 router.use("/users", userInfo);
-//router.use("/items", likes);
-//router.use()
+
 router.use((req, res) => {
   res.status(404).send({ message: "Router not found" });
 });

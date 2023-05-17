@@ -3,7 +3,7 @@ const {
   BAD_DATA,
   DOC_NOTFOUND_ERROR,
   DEFAULT_ERROR,
-} = require("../utils/errors.js");
+} = require("../utils/errors");
 
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
