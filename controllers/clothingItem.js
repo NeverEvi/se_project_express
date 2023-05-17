@@ -10,7 +10,6 @@ const createItem = (req, res) => {
   const owner = req.userId;
   ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
-      console.log(item);
       res.send({ data: item });
     })
     .catch((err) => {
@@ -27,10 +26,8 @@ const createItem = (req, res) => {
           .status(DOC_NOTFOUND_ERROR)
           .send({ message: "Create Item Failed", err });
         return;
-      } else {
-        res.status(DEFAULT_ERROR).send({ message: "Create Item Failed", err });
-        return;
       }
+      res.status(DEFAULT_ERROR).send({ message: "Create Item Failed", err });
     });
 };
 
@@ -90,28 +87,20 @@ const deleteItem = (req, res) => {
     .then((item) => res.status(200).send({}))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Delete Item Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
         return;
       }
       if (err.name === "CastError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Delete Item Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Delete Item Failed", message: err.message });
-        return;
-      } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Delete Item Failed", message: err.message });
+          .send({ message: "Delete Item Failed", err });
         return;
       }
+      res.status(DEFAULT_ERROR).send({ message: "Delete Item Failed", err });
     });
 };
 ///////////////////////////////////////////////
@@ -127,28 +116,20 @@ const updateLike = (req, res) => {
     .then((item) => res.status(200).send({ data: item }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Update Like Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Update Like Failed", err });
         return;
       }
       if (err.name === "CastError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Update Like Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Update Like Failed", err });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Update Like Failed", message: err.message });
-        return;
-      } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Update Like Failed", message: err.message });
+          .send({ message: "Update Like Failed", err });
         return;
       }
+      res.status(DEFAULT_ERROR).send({ message: "Update Like Failed", err });
     });
 };
 
@@ -165,28 +146,20 @@ const deleteLike = (req, res) => {
     .then((item) => res.status(200).send({}))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Delete Like Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Delete Like Failed", err });
         return;
       }
       if (err.name === "CastError") {
-        res
-          .status(BAD_DATA)
-          .send({ message: "Delete Like Failed", message: err.message });
+        res.status(BAD_DATA).send({ message: "Delete Like Failed", err });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Delete Like Failed", message: err.message });
-        return;
-      } else {
-        res
-          .status(DEFAULT_ERROR)
-          .send({ message: "Delete Like Failed", message: err.message });
+          .send({ message: "Delete Like Failed", err });
         return;
       }
+      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed", err });
     });
 };
 
