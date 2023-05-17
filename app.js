@@ -12,9 +12,10 @@ const routes = require("./routes");
 app.use(express.json());
 app.use(routes);
 
-module.exports.createItem = (req, res) => {
-  console.log(req.user._id);
-};
+//module.exports.createItem = (req, res) => {
+//  console.log(req.user._id);
+//  console.log();
+//};
 
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);

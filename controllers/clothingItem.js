@@ -109,7 +109,7 @@ const updateLike = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $addToSet: { likes: req.userId } },
+    { $set: { likes: req.userId } },
     { new: true }
   )
     .orFail()
@@ -135,15 +135,16 @@ const updateLike = (req, res) => {
 
 const deleteLike = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findById(
+  ClothingItem.findByIdAndUpdate(
     itemId,
-    {
-      $pull: { likes: req.userId },
-    },
+    { $pull: { likes: req.userId } },
     { new: true }
   )
     .orFail()
-    .then((item) => res.status(200).send({}))
+    .then((item) => {
+      res.status(200).send({});
+      return;
+    })
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Delete Like Failed", err });
@@ -159,7 +160,9 @@ const deleteLike = (req, res) => {
           .send({ message: "Delete Like Failed", err });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed", err });
+      res
+        .status(DEFAULT_ERROR)
+        .send({ message: "Delete Like Failed", message: err.message });
     });
 };
 
