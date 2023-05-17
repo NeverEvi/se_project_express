@@ -14,7 +14,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
-    "mongoose": "^7.1.1"
+    "mongoose": "^7.1.1",
+    "validator": "^12.2.0"
   },
   "devDependencies": {
     "eslint": "^8.40.0",
@@ -23,7 +24,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-react": "^7.32.2",
     "nodemon": "^2.0.22",
-    "prettier": "^2.8.8",
-    "validator": "^12.2.0"
+    "prettier": "^2.8.8"
   }
 }

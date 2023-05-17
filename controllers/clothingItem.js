@@ -103,7 +103,7 @@ const deleteItem = (req, res) => {
       res.status(DEFAULT_ERROR).send({ message: "Delete Item Failed", err });
     });
 };
-///////////////////////////////////////////////
+
 const updateLike = (req, res) => {
   const { itemId } = req.params;
 
@@ -135,7 +135,7 @@ const updateLike = (req, res) => {
 
 const deleteLike = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(
+  ClothingItem.findById(
     itemId,
     {
       $pull: { likes: req.userId },
@@ -163,7 +163,6 @@ const deleteLike = (req, res) => {
     });
 };
 
-////////////////////////////////////////////////
 module.exports = {
   createItem,
   getItems,
