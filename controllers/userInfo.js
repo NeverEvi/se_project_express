@@ -56,13 +56,11 @@ const getUsers = (req, res) => {
 };
 const getUser = (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   userInfo
     .findById(userId)
     .orFail()
     .then((user) => res.status(200).send({ user }))
     .catch((err) => {
-      console.log(err);
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Get User Failed", err });
         return;

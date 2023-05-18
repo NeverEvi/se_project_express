@@ -81,7 +81,6 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(itemId);
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then(() => res.status(200).send({}))
@@ -109,7 +108,7 @@ const updateLike = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $set: { likes: req.userId } },
+    { $addToSet: { likes: req.userId } },
     { new: true }
   )
     .orFail()
@@ -135,7 +134,7 @@ const updateLike = (req, res) => {
 
 const deleteLike = (req, res) => {
   const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(
+  ClothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.userId } },
     { new: true }
