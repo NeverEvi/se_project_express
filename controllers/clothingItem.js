@@ -108,7 +108,7 @@ const updateLike = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $addToSet: { likes: req.userId } },
+    { $set: { likes: req.userId } },
     { new: true }
   )
     .orFail()
@@ -140,8 +140,8 @@ const deleteLike = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then(() => {
-      res.status(200).send({});
+    .then((item) => {
+      res.status(200).send({ item });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
