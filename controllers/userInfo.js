@@ -18,16 +18,6 @@ const createUser = (req, res) => {
         res.status(BAD_DATA).send({ message: "Create User Failed", err });
         return;
       }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Create User Failed", err });
-        return;
-      }
-      if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Create User Failed", err });
-        return;
-      }
       res.status(DEFAULT_ERROR).send({ message: "Create User Failed", err });
     });
 };
@@ -37,14 +27,6 @@ const getUsers = (req, res) => {
     .find({})
     .then((items) => res.status(200).send(items))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Get Users Failed", err });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Get Users Failed", err });
-        return;
-      }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
@@ -61,10 +43,6 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.status(200).send({ user }))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Get User Failed", err });
-        return;
-      }
       if (err.name === "CastError") {
         res.status(BAD_DATA).send({ message: "Get User Failed", err });
         return;

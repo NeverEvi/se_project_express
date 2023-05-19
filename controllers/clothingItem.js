@@ -17,16 +17,6 @@ const createItem = (req, res) => {
         res.status(BAD_DATA).send({ message: "Create Item Failed", err });
         return;
       }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Create Item Failed", err });
-        return;
-      }
-      if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Create Item Failed", err });
-        return;
-      }
       res.status(DEFAULT_ERROR).send({ message: "Create Item Failed", err });
     });
 };
@@ -35,14 +25,6 @@ const getItems = (req, res) => {
   ClothingItem.find({})
     .then((items) => res.status(200).send(items))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Get Items Failed", err });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Get Items Failed", err });
-        return;
-      }
       if (err.name === "DocumentNotFoundError") {
         res
           .status(DOC_NOTFOUND_ERROR)
@@ -83,7 +65,9 @@ const deleteItem = (req, res) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
-    .then(() => res.status(200).send({}))
+    .then(() =>
+      res.status(200).send({ message: "Delete Item Successful", itemId })
+    )
     .catch((err) => {
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
