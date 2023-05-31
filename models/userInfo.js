@@ -40,13 +40,11 @@ userInfo.statics.findUserByCredentials = function findUserByCredentials(
   return this.findOne({ email })
     .select("+password")
     .then((user) => {
-      console.log(user + " (models/userInfo.js line 43)");
       if (!user) {
         return Promise.reject(new Error("Incorrect password or email"));
       }
 
       return bcrypt.compare(password, user.password).then((matched) => {
-        console.log(matched) + " (models/userInfo.js line 49)";
         if (!matched) {
           return Promise.reject(new Error("Incorrect password or email"));
         }

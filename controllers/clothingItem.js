@@ -3,14 +3,13 @@ const {
   BAD_DATA,
   DOC_NOTFOUND_ERROR,
   DEFAULT_ERROR,
-  UNAUTHORIZED,
   FORBIDDEN,
 } = require("../utils/errors");
 
 const createItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
-  console.log(owner + " (controllers/clothingItem.js line 12)");
+
   ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
       res.status(200).send({ data: item });
@@ -66,12 +65,9 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
-  console.log(itemId + " (controllers/clothingItem.js line 68)");
-  console.log(req.user._id);
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      console.log(item);
       if (item.owner._id != req.user._id) {
         const err = new Error("Failed. Cannot delete.");
         err.status = FORBIDDEN;
@@ -108,7 +104,6 @@ const deleteItem = (req, res) => {
 
 const updateLike = (req, res) => {
   const { itemId } = req.params;
-  console.log(itemId + " (from controllers/clothingItem.js line 103)");
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $set: { likes: req.userId } },
@@ -116,7 +111,6 @@ const updateLike = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      console.log(item);
       if (!item) {
         const err = new Error("No item found");
         err.status = DOC_NOTFOUND_ERROR;
@@ -147,8 +141,6 @@ const updateLike = (req, res) => {
 const deleteLike = (req, res) => {
   const { itemId } = req.params;
 
-  console.log(itemId + " (from controllers/clothingItem.js line 141)");
-  console.log(req.userId);
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.userId } },
@@ -156,7 +148,6 @@ const deleteLike = (req, res) => {
   )
     .orFail()
     .then((item) => {
-      console.log({ item });
       if (!item) {
         const err = new Error("No item found");
         err.status = DOC_NOTFOUND_ERROR;

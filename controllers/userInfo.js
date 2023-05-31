@@ -37,7 +37,6 @@ const createUser = (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err + " (controllers/userInfo.js line 40)");
       if (err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Create User Failed", err });
         return;
@@ -83,7 +82,6 @@ const getUsers = (req, res) => {
     });
 };
 const getUser = (req, res) => {
-  console.log(req.params.userid + " (controllers/userInfo.js line 86)");
   userInfo
     .findById(req.params.userid)
     .orFail()
