@@ -63,7 +63,7 @@ const login = (req, res) => {
       });
       res.send({ token });
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(UNAUTHORIZED).send({ message: "Login Failed" });
     });
 };
