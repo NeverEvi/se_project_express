@@ -12,28 +12,22 @@ const createItem = (req, res) => {
 
   ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
-      res.status(200).send({ data: item });
+      res.send({ data: item });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Create Item Failed", err });
+        res.status(BAD_DATA).send({ message: "Create Item Failed" });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Create Item Failed", err });
+      res.status(DEFAULT_ERROR).send({ message: "Create Item Failed" });
     });
 };
 
 const getItems = (req, res) => {
   ClothingItem.find({})
-    .then((items) => res.status(200).send(items))
-    .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Get Items Failed", err });
-        return;
-      }
-      res.status(DEFAULT_ERROR).send({ message: "Get Items Failed", err });
+    .then((items) => res.send(items))
+    .catch(() => {
+      res.status(DEFAULT_ERROR).send({ message: "Get Items Failed" });
     });
 };
 
@@ -43,23 +37,21 @@ const updateItem = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(itemId, { $set: { imageUrl } })
     .orFail()
-    .then((item) => res.status(200).send({ data: item }))
+    .then((item) => res.send({ data: item }))
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Update Item Failed", err });
+        res.status(BAD_DATA).send({ message: "Update Item Failed" });
         return;
       }
       if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Update Item Failed", err });
+        res.status(BAD_DATA).send({ message: "Update Item Failed" });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Update Item Failed", err });
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Update Item Failed" });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Update Item Failed", err });
+      res.status(DEFAULT_ERROR).send({ message: "Update Item Failed" });
     });
 };
 
@@ -68,7 +60,7 @@ const deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (item.owner._id != req.user._id) {
+      if (item.owner._id !== req.user._id) {
         const err = new Error("Failed. Cannot delete.");
         err.status = FORBIDDEN;
         err.name = "FORBIDDEN";
@@ -76,29 +68,27 @@ const deleteItem = (req, res) => {
       }
     })
     .then(() => {
-      res.status(200).send({ message: "Delete Item Successful", itemId });
+      res.send({ message: "Delete Item Successful", itemId });
       return ClothingItem.findByIdAndDelete(itemId);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
+        res.status(BAD_DATA).send({ message: "Delete Item Failed" });
         return;
       }
       if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Delete Item Failed", err });
+        res.status(BAD_DATA).send({ message: "Delete Item Failed" });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Delete Item Failed", err });
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Delete Item Failed" });
         return;
       }
       if (err.name === "FORBIDDEN") {
-        res.status(FORBIDDEN).send({ message: "Delete Item Failed", err });
+        res.status(FORBIDDEN).send({ message: "Delete Item Failed" });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Delete Item Failed", err });
+      res.status(DEFAULT_ERROR).send({ message: "Delete Item Failed" });
     });
 };
 
@@ -106,7 +96,7 @@ const updateLike = (req, res) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $set: { likes: req.userId } },
+    { $set: { likes: req.user._id } },
     { new: true }
   )
     .orFail()
@@ -117,24 +107,22 @@ const updateLike = (req, res) => {
         err.name = "DocumentNotFoundError";
         throw err;
       }
-      res.status(200).send({ data: item });
+      res.send({ data: item });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Update Like Failed", err });
+        res.status(BAD_DATA).send({ message: "Update Like Failed" });
         return;
       }
       if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Update Like Failed", err });
+        res.status(BAD_DATA).send({ message: "Update Like Failed" });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Update Like Failed", err });
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Update Like Failed" });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Update Like Failed", err });
+      res.status(DEFAULT_ERROR).send({ message: "Update Like Failed" });
     });
 };
 
@@ -143,7 +131,7 @@ const deleteLike = (req, res) => {
 
   ClothingItem.findByIdAndUpdate(
     itemId,
-    { $pull: { likes: req.userId } },
+    { $pull: { likes: req.user._id } },
     { new: true }
   )
     .orFail()
@@ -154,24 +142,22 @@ const deleteLike = (req, res) => {
         err.name = "DocumentNotFoundError";
         throw err;
       }
-      res.status(200).send({ item });
+      res.send({ item });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Delete Like Failed", err });
+        res.status(BAD_DATA).send({ message: "Delete Like Failed" });
         return;
       }
       if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Delete Like Failed", err });
+        res.status(BAD_DATA).send({ message: "Delete Like Failed" });
         return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res
-          .status(DOC_NOTFOUND_ERROR)
-          .send({ message: "Delete Like Failed", err });
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Delete Like Failed" });
         return;
       }
-      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed", err });
+      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed" });
     });
 };
 

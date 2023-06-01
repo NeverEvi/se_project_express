@@ -3,7 +3,6 @@ const getToken = require("../middlewares/auth");
 const {
   createItem,
   getItems,
-  updateItem,
   deleteItem,
   updateLike,
   deleteLike,
@@ -11,10 +10,9 @@ const {
 
 router.post("/", getToken, createItem);
 router.get("/", getItems);
-router.put("/:itemId", getToken, updateItem);
 router.delete("/:itemId", getToken, deleteItem);
 
-router.put("/:itemId/likes", updateLike);
-router.delete("/:itemId/likes", deleteLike);
+router.put("/:itemId/likes", getToken, updateLike);
+router.delete("/:itemId/likes", getToken, deleteLike);
 
 module.exports = router;
