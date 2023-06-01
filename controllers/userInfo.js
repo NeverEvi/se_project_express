@@ -68,35 +68,6 @@ const login = (req, res) => {
     });
 };
 
-const getUsers = (req, res) => {
-  userInfo
-    .find({})
-    .then((items) => res.send(items))
-    .catch((err) => {
-      if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Get Users Failed" });
-        return;
-      }
-      res.status(DEFAULT_ERROR).send({ message: "Get Users Failed" });
-    });
-};
-const getUser = (req, res) => {
-  userInfo
-    .findById(req.params.userid)
-    .orFail()
-    .then((user) => res.send({ user }))
-    .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Get User Failed" });
-        return;
-      }
-      if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Get User Failed" });
-        return;
-      }
-      res.status(DEFAULT_ERROR).send({ message: "Get User Failed" });
-    });
-};
 const getCurrentUser = (req, res) => {
   const { _id } = req.user;
 
@@ -118,13 +89,17 @@ const getCurrentUser = (req, res) => {
 };
 const updateUser = (req, res) => {
   const { _id } = req.user;
-
+  const { name, avatar } = req.body;
   userInfo
-    .findByIdAndUpdate(_id)
+    .findByIdAndUpdate(
+      _id,
+      { name, avatar },
+      { new: true, runValidators: true }
+    )
     .orFail()
     .then((user) => res.send({ user }))
     .catch((err) => {
-      if (err.name === "CastError") {
+      if (err.name === "CastError" || err.name === "ValidationError") {
         res.status(BAD_DATA).send({ message: "Update User Failed" });
         return;
       }
@@ -137,8 +112,6 @@ const updateUser = (req, res) => {
 };
 module.exports = {
   createUser,
-  getUser,
-  getUsers,
   getCurrentUser,
   updateUser,
   login,

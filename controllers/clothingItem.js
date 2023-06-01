@@ -60,16 +60,15 @@ const deleteItem = (req, res) => {
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
-      if (item.owner._id !== req.user._id) {
+      if (String(item.owner) !== req.user._id) {
         const err = new Error("Failed. Cannot delete.");
         err.status = FORBIDDEN;
         err.name = "FORBIDDEN";
         throw err;
       }
-    })
-    .then(() => {
-      res.send({ message: "Delete Item Successful", itemId });
-      return ClothingItem.findByIdAndDelete(itemId);
+      return ClothingItem.findByIdAndDelete(itemId).then(() =>
+        res.send({ message: "Delete Item Successful", itemId })
+      );
     })
     .catch((err) => {
       if (err.name === "ValidationError") {

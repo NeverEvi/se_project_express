@@ -1,1 +1,33 @@
 testin
+
+//controllers/userInfo.js
+
+const getUsers = (req, res) => {
+  userInfo
+    .find({})
+    .then((items) => res.send(items))
+    .catch((err) => {
+      if (err.name === "DocumentNotFoundError") {
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Get Users Failed" });
+        return;
+      }
+      res.status(DEFAULT_ERROR).send({ message: "Get Users Failed" });
+    });
+};
+const getUser = (req, res) => {
+  userInfo
+    .findById(req.params.userid)
+    .orFail()
+    .then((user) => res.send({ user }))
+    .catch((err) => {
+      if (err.name === "CastError") {
+        res.status(BAD_DATA).send({ message: "Get User Failed" });
+        return;
+      }
+      if (err.name === "DocumentNotFoundError") {
+        res.status(DOC_NOTFOUND_ERROR).send({ message: "Get User Failed" });
+        return;
+      }
+      res.status(DEFAULT_ERROR).send({ message: "Get User Failed" });
+    });
+};
