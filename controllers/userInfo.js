@@ -55,18 +55,16 @@ const createUser = (req, res) => {
 const login = (req, res) => {
   const { email, password } = req.body;
   console.log("Login attempt fired");
-  console.log(email);
   return userInfo
     .findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, JWT_SECRET, {
         expiresIn: "7d",
       });
-      console.log("Token sent!: ", token);
+      console.log("Token sent!");
       res.send({ token });
     })
     .catch(() => {
-      console.log("Login attempt failed");
       res.status(UNAUTHORIZED).send({ message: "Login Failed" });
     });
 };

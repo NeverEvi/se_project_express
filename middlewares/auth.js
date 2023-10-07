@@ -15,7 +15,6 @@ const extractBearerToken = (header) => header.replace("Bearer ", "");
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   console.log("Authorization: ", authorization);
-  console.log(req.body);
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return handleAuthError(res);
@@ -26,7 +25,6 @@ module.exports = (req, res, next) => {
 
   try {
     payload = jwt.verify(token, JWT_SECRET);
-    console.log("Attempt");
   } catch (err) {
     return handleAuthError(res);
   }
