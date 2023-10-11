@@ -6,7 +6,6 @@ const {
 } = process.env;
 
 const handleAuthError = (res) => {
-  console.log("AUTH ERROR");
   res.status(UNAUTHORIZED).send({ message: "Authorization Error" });
 };
 
@@ -14,7 +13,6 @@ const extractBearerToken = (header) => header.replace("Bearer ", "");
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
     return handleAuthError(res);

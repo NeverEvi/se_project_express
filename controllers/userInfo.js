@@ -54,7 +54,6 @@ const createUser = (req, res) => {
 
 const login = (req, res) => {
   const { email, password } = req.body;
-  console.log("Login attempt fired");
   return userInfo
     .findUserByCredentials(email, password)
     .then((user) => {

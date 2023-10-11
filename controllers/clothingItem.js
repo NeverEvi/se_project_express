@@ -127,7 +127,6 @@ const updateLike = (req, res) => {
 
 const deleteLike = (req, res) => {
   const { itemId } = req.params;
-
   ClothingItem.findByIdAndUpdate(
     itemId,
     { $pull: { likes: req.user._id } },
