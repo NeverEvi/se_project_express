@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const { errors } = require("celebrate");
 const { requestLogger, errorLogger } = require("./middlewares/logger");
-const router = require("./routes/index");
+
 const errorHandler = require("./middlewares/error-handler");
 require("dotenv").config();
 
@@ -24,7 +24,6 @@ app.options("*", cors());
 
 app.use(requestLogger);
 
-app.use("/", router);
 app.use(routes);
 
 app.use(errorLogger);
