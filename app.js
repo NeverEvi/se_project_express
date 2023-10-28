@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cors());
 app.options("*", cors());
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   const allowedOrigins = [
     "http://localhost:3000",
     "https://api.wtwr.strangled.net",
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
   );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   next();
-});
+});*/
 
 app.use(requestLogger);
 
