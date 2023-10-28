@@ -13,7 +13,7 @@ router.use("/items", clothingItem);
 router.use("/users", userInfo);
 
 router.use(("*", req, res, next) => {
-  next(new NotFoundError("U fucked. Router not found"));
+  next(new NotFoundError("Router not found"));
 });
 
 module.exports = router;
