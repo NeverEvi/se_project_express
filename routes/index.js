@@ -1,17 +1,19 @@
 const router = require("express").Router();
-const { DOC_NOTFOUND_ERROR } = require("../utils/errors");
 const clothingItem = require("./clothingItem");
+
 const userInfo = require("./userInfo");
 const { createUser, login } = require("../controllers/userInfo");
+const { validateAuth, validateUserCreation } = require("../middlewares/validation");
+const NotFoundError = require("../errors/NotFoundError")
 
-router.post("/signup", createUser);
-router.post("/signin", login);
+router.post("/signup", validateUserCreation, createUser);
+router.post("/signin", validateAuth, login);
 
 router.use("/items", clothingItem);
 router.use("/users", userInfo);
 
-router.use((req, res) => {
-  res.status(500).send({ message: "U fucked. Router not found" });
+router.use(("*", req, res, next) => {
+  next(new NotFoundError("U fucked. Router not found"));
 });
 
 module.exports = router;
