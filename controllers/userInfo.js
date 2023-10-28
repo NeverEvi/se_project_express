@@ -6,13 +6,12 @@ const {
   JWT_SECRET = "eb28135ebcfc17578f96d4d65b6c7871f2c803be4180c165061d5c2db621c51b",
 } = process.env;
 
-const {
-  BAD_DATA,
-  DOC_NOTFOUND_ERROR,
-  DEFAULT_ERROR,
-  UNAUTHORIZED,
-  DUPLICATE_ERROR,
-} = require("../utils/errors");
+const BadRequestError = require("../errors/BadRequestError");
+const ConflictError = require("../errors/ConflictError");
+const DefaultError = require("../errors/DefaultError");
+const UnauthorizedError = require("../errors/UnauthorizedError");
+const NotFoundError = require("../errors/NotFoundError");
+const { DUPLICATE_ERROR } = require("../utils/errors");
 
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
@@ -39,16 +38,20 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Create User Failed" });
-        return;
+        next(new BadRequestError("Create User Failed: Validation Error"));
+        //res.status(BAD_DATA).send({ message: "Create User Failed" });
+        //return;
       }
       if (err.name === "DUPLICATE") {
-        res
-          .status(DUPLICATE_ERROR)
-          .send({ message: "Create User Failed: Email in use" });
-        return;
+        next(new ConflictError("Create User Failed: Email in use"));
+        //res
+        //  .status(DUPLICATE_ERROR)
+        //  .send({ message: "Create User Failed: Email in use" });
+        //return;
+      } else {
+        next(new DefaultError("Create User Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Create User Failed" });
+      //res.status(DEFAULT_ERROR).send({ message: "Create User Failed" });
     });
 };
 
@@ -63,7 +66,8 @@ const login = (req, res) => {
       res.send({ token });
     })
     .catch(() => {
-      res.status(UNAUTHORIZED).send({ message: "Login Failed" });
+      //res.status(UNAUTHORIZED).send({ message: "Login Failed" });
+      next(new UnauthorizedError("Login Failed: Unauthorized"));
     });
 };
 
@@ -76,14 +80,18 @@ const getCurrentUser = (req, res) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Get User Failed" });
-        return;
+        next(new BadRequestError("Get User Failed: Bad data"));
+        //res.status(BAD_DATA).send({ message: "Get User Failed" });
+        //return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Get User Failed" });
-        return;
+        next(new NotFoundError("Get User Failed: Document not found"));
+        //res.status(DOC_NOTFOUND_ERROR).send({ message: "Get User Failed" });
+        //return;
+      } else {
+        next(new DefaultError("Get User Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Get User Failed" });
+      //res.status(DEFAULT_ERROR).send({ message: "Get User Failed" });
     });
 };
 const updateUser = (req, res) => {
@@ -99,14 +107,18 @@ const updateUser = (req, res) => {
     .then((user) => res.send({ user }))
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Update User Failed" });
-        return;
+        next(new BadRequestError("Update User Failed: Bad or Invalid data"));
+        //res.status(BAD_DATA).send({ message: "Update User Failed" });
+        //return;
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Update User Failed" });
-        return;
+        next(new NotFoundError("Update User Failed: Document not found"));
+        //res.status(DOC_NOTFOUND_ERROR).send({ message: "Update User Failed" });
+        //return;
+      } else {
+        next(new DefaultError("Update User Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Update User Failed" });
+      //res.status(DEFAULT_ERROR).send({ message: "Update User Failed" });
     });
 };
 module.exports = {
