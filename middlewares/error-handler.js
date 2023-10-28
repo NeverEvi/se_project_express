@@ -4,4 +4,4 @@ const errorHandler = (err, req, res, next) => {
     message: statusCode === 500 ? "A server error has occured" : message,
   });
 };
-module.exports = { errorHandler };
+module.exports = errorHandler;
