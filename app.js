@@ -24,7 +24,7 @@ app.use(routes);
 app.use(errorLogger);
 
 app.use(errors());
-//app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log("listening on " + PORT);
