@@ -24,7 +24,7 @@ app.options("*", cors());
 
 app.use(requestLogger);
 
-app.use(routes).then(() => console.log("ROUTE ERROR"));
+app.use(routes);
 
 app.use(errorLogger);
 
