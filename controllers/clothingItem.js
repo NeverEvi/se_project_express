@@ -1,13 +1,10 @@
 const BadRequestError = require("../errors/BadRequestError");
+const DefaultError = require("../errors/DefaultError");
+const ForbiddenError = require("../errors/ForbiddenError");
+const NotFoundError = require("../errors/NotFoundError");
 const ClothingItem = require("../models/clothingItem");
-const {
-  BAD_DATA,
-  DOC_NOTFOUND_ERROR,
-  DEFAULT_ERROR,
-  FORBIDDEN,
-} = require("../utils/errors");
 
-const createItem = (req, res) => {
+const createItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   const owner = req.user._id;
 
@@ -18,22 +15,21 @@ const createItem = (req, res) => {
     .catch((err) => {
       if (err.name === "ValidationError") {
         next(new BadRequestError("Create Item Failed: Validation Error"));
-        return;
       } else {
         next(new DefaultError("Create Item Failed: A server error occured"));
       }
     });
 };
 
-const getItems = (req, res) => {
+const getItems = (req, res, next) => {
   ClothingItem.find({})
     .then((items) => res.send(items))
     .catch(() => {
-      res.status(DEFAULT_ERROR).send({ message: "Get Items Failed" });
+      next(new DefaultError("Get Item Failed: A server error occured"));
     });
 };
 
-const updateItem = (req, res) => {
+const updateItem = (req, res, next) => {
   const { itemId } = req.params;
   const { imageUrl } = req.body;
 
@@ -41,31 +37,24 @@ const updateItem = (req, res) => {
     .orFail()
     .then((item) => res.send({ data: item }))
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Update Item Failed" });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Update Item Failed" });
-        return;
+      if (err.name === "ValidationError" || err.name === "CastError") {
+        next(new BadRequestError("Update Item Failed: Validation Error"));
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Update Item Failed" });
-        return;
+        next(new NotFoundError("Update Item Failed: Not Found"));
+      } else {
+        next(new DefaultError("Create Item Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Update Item Failed" });
     });
 };
 
-const deleteItem = (req, res) => {
+const deleteItem = (req, res, next) => {
   const { itemId } = req.params;
   ClothingItem.findById(itemId)
     .orFail()
     .then((item) => {
       if (String(item.owner) !== req.user._id) {
-        const err = new Error("Failed. Cannot delete.");
-        err.status = FORBIDDEN;
-        err.name = "FORBIDDEN";
+        const err = new ForbiddenError("Delete Item Failed: Forbidden");
         throw err;
       }
       return ClothingItem.findByIdAndDelete(itemId).then(() =>
@@ -73,27 +62,21 @@ const deleteItem = (req, res) => {
       );
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Delete Item Failed" });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Delete Item Failed" });
-        return;
+      if (err.name === "ValidationError" || err.name === "CastError") {
+        next(new BadRequestError("Delete Item Failed: Validation Error"));
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Delete Item Failed" });
-        return;
+        next(new NotFoundError("Delete Item Failed: Not Found"));
       }
       if (err.name === "FORBIDDEN") {
-        res.status(FORBIDDEN).send({ message: "Delete Item Failed" });
-        return;
+        next(new ForbiddenError("Delete Item Failed: Forbidden"));
+      } else {
+        next(new DefaultError("Delete Item Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Delete Item Failed" });
     });
 };
 
-const updateLike = (req, res) => {
+const updateLike = (req, res, next) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     itemId,
@@ -103,31 +86,25 @@ const updateLike = (req, res) => {
     .orFail()
     .then((item) => {
       if (!item) {
-        const err = new Error("No item found");
-        err.status = DOC_NOTFOUND_ERROR;
+        const err = new NotFoundError("No item found");
         err.name = "DocumentNotFoundError";
         throw err;
       }
       res.send({ data: item });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Update Like Failed" });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Update Like Failed" });
-        return;
+      if (err.name === "ValidationError" || err.name === "CastError") {
+        next(new BadRequestError("Like Item Failed: Validation Error"));
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Update Like Failed" });
-        return;
+        next(new NotFoundError("Like Item Failed: Not Found"));
+      } else {
+        next(new DefaultError("Like Item Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Update Like Failed" });
     });
 };
 
-const deleteLike = (req, res) => {
+const deleteLike = (req, res, next) => {
   const { itemId } = req.params;
   ClothingItem.findByIdAndUpdate(
     itemId,
@@ -137,27 +114,21 @@ const deleteLike = (req, res) => {
     .orFail()
     .then((item) => {
       if (!item) {
-        const err = new Error("No item found");
-        err.status = DOC_NOTFOUND_ERROR;
+        const err = new NotFoundError("No item found");
         err.name = "DocumentNotFoundError";
         throw err;
       }
       res.send({ item });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Delete Like Failed" });
-        return;
-      }
-      if (err.name === "CastError") {
-        res.status(BAD_DATA).send({ message: "Delete Like Failed" });
-        return;
+      if (err.name === "ValidationError" || err.name === "CastError") {
+        next(new BadRequestError("UnLike Item Failed: Validation Error"));
       }
       if (err.name === "DocumentNotFoundError") {
-        res.status(DOC_NOTFOUND_ERROR).send({ message: "Delete Like Failed" });
-        return;
+        next(new NotFoundError("UnLike Item Failed: Not Found"));
+      } else {
+        next(new DefaultError("UnLike Item Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Delete Like Failed" });
     });
 };
 

@@ -1,5 +1,4 @@
 const { Joi, celebrate } = require("celebrate");
-//const { default: validator } = require('validator');
 const validator = require("validator");
 
 const validateUrl = (value, helpers) => {
