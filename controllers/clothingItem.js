@@ -1,3 +1,4 @@
+const BadRequestError = require("../errors/BadRequestError");
 const ClothingItem = require("../models/clothingItem");
 const {
   BAD_DATA,
@@ -16,10 +17,11 @@ const createItem = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(BAD_DATA).send({ message: "Create Item Failed" });
+        next(new BadRequestError("Create Item Failed: Validation Error"));
         return;
+      } else {
+        next(new DefaultError("Create Item Failed: A server error occured"));
       }
-      res.status(DEFAULT_ERROR).send({ message: "Create Item Failed" });
     });
 };
 
