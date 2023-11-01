@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const userInfo = require("../models/userInfo");
 
 const {
-  JWT_SECRET = "eb28135ebcfc17578f96d4d65b6c7871f2c803be4180c165061d5c2db621c51b",
+  JWT_SECRET = "7a1e5d998e9b10c2f76b2baf57e80794c131741c265a8b186e03dd892ebcb721",
 } = process.env;
 
 const BadRequestError = require("../errors/BadRequestError");

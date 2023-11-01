@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 
 const {
-  JWT_SECRET = "eb28135ebcfc17578f96d4d65b6c7871f2c803be4180c165061d5c2db621c51b",
+  JWT_SECRET = "7a1e5d998e9b10c2f76b2baf57e80794c131741c265a8b186e03dd892ebcb721",
 } = process.env;
 
 const handleAuthError = () => {
@@ -11,7 +11,7 @@ const handleAuthError = () => {
 
 const extractBearerToken = (header) => header.replace("Bearer ", "");
 
-module.exports = (req, res, next) => {
+const auth = (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith("Bearer ")) {
@@ -27,7 +27,9 @@ module.exports = (req, res, next) => {
     return handleAuthError(res);
   }
 
-  req.user = payload; // adding the payload to the Request object
+  req.user = payload;
 
-  next(); // passing the request further along
+  return next();
 };
+
+module.exports = auth;

@@ -12,10 +12,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 const routes = require("./routes");
 
-mongoose
-  .connect("mongodb://127.0.0.1:27017/wtwr_db")
-  .then(() => console.log("Connected to mongoDB"))
-  .catch((error) => console.log("Couldn't connect to DB, error: ", error));
+mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 
 app.use(express.json());
 app.use(cors());
@@ -36,6 +33,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log("listening on " + PORT);
-});
+app.listen(PORT, () => {});

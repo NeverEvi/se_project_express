@@ -68,7 +68,7 @@ const deleteItem = (req, res, next) => {
       if (err.name === "DocumentNotFoundError") {
         next(new NotFoundError("Delete Item Failed: Not Found"));
       }
-      if (err.name === "FORBIDDEN") {
+      if (err.name === "ForbiddenError") {
         next(new ForbiddenError("Delete Item Failed: Forbidden"));
       } else {
         next(new DefaultError("Delete Item Failed: A server error occured"));
